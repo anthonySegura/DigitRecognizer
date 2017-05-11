@@ -6,6 +6,7 @@
         <meta http-equiv="Pragma" CONTENT="no-cache">
         <meta charset="utf-8">
         <title>Digit Recognizer</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
         <link href="{{ url_for('static', filename='styles/style.css') }}" rel="stylesheet">
         <script src="{{ url_for('static', filename='libraries/p5.js') }}"></script>
@@ -14,7 +15,7 @@
 
     </head>
     <body>
-        <h1 align = "center">Escriba un número</h1>
+        <h1 align = "center">Dibuje un número</h1>
         <br><br>
         <div class="container">
             <div class="row row-centered">
@@ -22,9 +23,9 @@
                 <div class= "col-md-2 col-centered" id = "RightSketch"> </div>
             </div>
             <br><br>
-            <div class="row row centered">
+            <!-- <div class="row row centered">
                 <div id = "Button" align = "center"></div> </div>
-            </div>
+            </div> -->
         </div>
     </body>
 </html>

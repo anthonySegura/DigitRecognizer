@@ -9,11 +9,18 @@ import base64
 #Manejo de vectores y matrices
 import numpy as np
 #Keras para cargar y usar el modelo
+import keras
 from keras.models import load_model
+from keras import backend as K
+K.set_image_dim_ordering('th')
 
 #Configuración del WebService
 app = Flask(__name__)
 app.debug = True
+
+#Se carga la red neuronal
+graph = K.get_session().graph
+cnn = load_model('model.h5')
 
 #EndPoints
 
@@ -23,13 +30,12 @@ def index():
 
 #Convierte la imagen a Escala de grises
 def toGray(img):
-    return img.convert('1')
+    return np.dot(img[...,:3], [0.333, 0.333, 0.333])
 
-@app.route('/upload', methods = ['POST'])
+@app.route('/upload', methods=['POST'])
 def upload():
     data = request.form['img']
     #La imagen se recibe desde la petición en formato base64
-
     #Procesamiento de la imagen
     #Se convierte a imagen
     img = Image.open(BytesIO(base64.b64decode(data)))
@@ -39,15 +45,22 @@ def upload():
     #Normalización de los pixeles
     gray = gray / 255
     #Ultimos ajustes para pasarsela al modelo
-    x = gray.reshape(1, 28, 28)
+    x = gray.reshape(1, 1, 28, 28)
+    #Predicciones en probabilidades
+    with graph.as_default():
+        prediction = cnn.predict(x)
+        label = cnn.predict_classes(x)
+    #Se envia el resultado en jSON
+    return jsonify(status = 'true', number = label.tolist()[0], probabilities = prediction.tolist()[0])
+
+@app.route('/test', methods=['POST'])
+def test():
+    print(request.form)
+    return jsonify(status = 'ok')
 
 #Evita que Chrome almacene en cache la aplicación
 @app.after_request
 def add_header(response):
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
@@ -55,4 +68,4 @@ def add_header(response):
     #Prediccion
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', port = 8080, debug = 'True')
+    app.run(host = '0.0.0.0', port = 9000, debug = 'True')
