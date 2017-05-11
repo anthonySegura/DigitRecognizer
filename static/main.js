@@ -81,11 +81,11 @@ var chart = new p5(function(sketch){
               sketch.translate(0, i* (barWidth + barMargin));
               sketch.fill('steelblue');
 
-              sketch.rect(0,0,200, barWidth);
+              sketch.rect(0,5,200, barWidth);
               sketch.fill('red');
-              sketch.rect(0,0,data[i] * 200, barWidth);
+              sketch.rect(0,5,data[i] * 200, barWidth);
               sketch.fill('#FFF');
-              sketch.text(i + " : "+(Math.round(data[i] * 100)).toFixed(1) + "%", 5, barWidth/2 + 5); // write data
+              sketch.text(i + " : "+(Math.round(data[i] * 100)).toFixed(1) + "%", 5, barWidth + 4); // write data
 
               sketch.pop();
         }
