@@ -32,6 +32,7 @@ def index():
 def toGray(img):
     return np.dot(img[...,:3], [0.333, 0.333, 0.333])
 
+#Recibe la imagen en base64 y regresa la predicción del modelo
 @app.route('/upload', methods=['POST'])
 def upload():
     data = request.form['img']
@@ -46,17 +47,13 @@ def upload():
     gray = gray / 255
     #Ultimos ajustes para pasarsela al modelo
     x = gray.reshape(1, 1, 28, 28)
-    #Predicciones en probabilidades
+    #Predicciones
     with graph.as_default():
         prediction = cnn.predict(x)
         label = cnn.predict_classes(x)
-    #Se envia el resultado en jSON
+    #Se envia el resultado en JSON
     return jsonify(status = 'true', number = label.tolist()[0], probabilities = prediction.tolist()[0])
 
-@app.route('/test', methods=['POST'])
-def test():
-    print(request.form)
-    return jsonify(status = 'ok')
 
 #Evita que Chrome almacene en cache la aplicación
 @app.after_request
@@ -64,8 +61,6 @@ def add_header(response):
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'public, max-age=0'
     return response
-
-    #Prediccion
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 8080))

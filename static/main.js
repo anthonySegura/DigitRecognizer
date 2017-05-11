@@ -3,7 +3,7 @@ var drawing = false;
 var next = false;
 
 //Canvas separados para dibujar y para el grafico de las probabilidades
-
+//Sketch para dibujar
 var drawingZone = new p5(function(sketch){
     sketch.setup = function(){
         var canvas = sketch.createCanvas(200,200);
@@ -52,6 +52,7 @@ var drawingZone = new p5(function(sketch){
 
 },"LeftSketch");
 
+//Sketch para el gráfico
 var chart = new p5(function(sketch){
 
     sketch.setup = function(){
@@ -60,6 +61,7 @@ var chart = new p5(function(sketch){
         canvas.parent("RightSketch");
     }
 
+    //Dibuja las barras del gŕafico
     sketch.plot = function(data){
         sketch.background(255);
         var width = 200, // canvas width and height
@@ -95,6 +97,7 @@ var chart = new p5(function(sketch){
 
 }, "RightSketch");
 
+//Petición al server para clasificar el número
 uploadImage = function(base64){
     $.post("/upload",{
         img: base64
