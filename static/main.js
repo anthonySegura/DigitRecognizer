@@ -63,7 +63,7 @@ var chart = new p5(function(sketch){
 
     //Dibuja las barras del gŕafico
     sketch.plot = function(data){
-        sketch.background(255);
+        sketch.background(238,238,238);
         var width = 200, // canvas width and height
               height = 200,
               margin = 20,
